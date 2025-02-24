@@ -8,6 +8,16 @@ variable "region" {
   description = "Region in which the resources will be created"
 }
 
+variable "az_a" {
+  type        = string
+  description = "Availability zone A"
+}
+
+variable "az_b" {
+  type        = string
+  description = "Availability zone B"
+}
+
 variable "vpc_cidr" {
   type        = string
   description = "CIDR block for the VPC"

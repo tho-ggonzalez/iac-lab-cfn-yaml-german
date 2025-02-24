@@ -1,4 +1,6 @@
 region       = "eu-central-1"
+az_a         = "eu-central-1a"
+az_b         = "eu-central-1b"
 prefix       = "gg-iac-lab"
 vpc_cidr     = "192.168.1.0/25"
 subnet1_cidr = "192.168.1.0/28"
