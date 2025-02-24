@@ -80,3 +80,16 @@ resource "aws_internet_gateway" "main-igw" {
     Name = "${var.prefix}-igw"
   }
 }
+
+resource "aws_eip" "nat-eip" {
+  domain = "vpc"
+}
+
+resource "aws_nat_gateway" "nat-gw" {
+  allocation_id = aws_eip.nat-eip.id
+  subnet_id     = aws_subnet.subnet5.id
+
+  tags = {
+    Name = "${var.prefix}-nat-gw"
+  }
+}
