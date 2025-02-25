@@ -1,5 +1,7 @@
-region       = "eu-central-1"
-prefix       = "gg-iac-lab"
+region = "eu-central-1"
+prefix = "gg-iac-lab"
+
+# Network
 vpc_cidr     = "192.168.1.0/25"
 subnet1_cidr = "192.168.1.0/28"
 subnet2_cidr = "192.168.1.16/28"
