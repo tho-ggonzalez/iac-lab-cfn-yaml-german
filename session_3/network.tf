@@ -43,6 +43,15 @@ resource "aws_subnet" "secure_subnet_1" {
   }
 }
 
+resource "aws_subnet" "manual_subnet_1" {
+  vpc_id            = aws_vpc.main_vpc.id
+  cidr_block        = "192.168.1.96/28"
+
+  tags = {
+    Name = "${var.prefix}-manual-subnet-1"
+  }
+}
+
 resource "aws_subnet" "public_subnet_2" {
   vpc_id            = aws_vpc.main_vpc.id
   cidr_block        = var.subnet4_cidr
