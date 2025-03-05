@@ -43,13 +43,26 @@ resource "aws_subnet" "secure_subnet_1" {
   }
 }
 
-resource "aws_subnet" "manual_subnet_1" {
-  vpc_id            = aws_vpc.main_vpc.id
-  cidr_block        = "192.168.1.96/28"
-
+resource "aws_subnet" "imported_manual_subnet_1" {
+  assign_ipv6_address_on_creation                = false
+  availability_zone                              = "eu-central-1a"
+  cidr_block                                     = "192.168.1.96/28"
+  customer_owned_ipv4_pool                       = null
+  enable_dns64                                   = false
+  enable_resource_name_dns_a_record_on_launch    = false
+  enable_resource_name_dns_aaaa_record_on_launch = false
+  ipv6_cidr_block                                = null
+  ipv6_native                                    = false
+  map_public_ip_on_launch                        = false
+  outpost_arn                                    = null
+  private_dns_hostname_type_on_launch            = "ip-name"
   tags = {
-    Name = "${var.prefix}-manual-subnet-1"
+    Name = "manual_subnet_1"
   }
+  tags_all = {
+    Name = "manual_subnet_1"
+  }
+  vpc_id = "vpc-0ae43da7e306bd36d"
 }
 
 resource "aws_subnet" "public_subnet_2" {
@@ -148,3 +161,9 @@ resource "aws_route_table_association" "private_routetable_assoc_2" {
   subnet_id      = aws_subnet.private_subnet_2.id
   route_table_id = aws_route_table.private_routetable.id
 }
+
+# import {
+#   to = aws_subnet.imported_manual_subnet_1
+#   id = "subnet-068abf3c86ac198d0"
+# }
+
