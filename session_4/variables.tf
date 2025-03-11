@@ -12,23 +12,3 @@ variable "vpc_cidr" {
   type        = string
   description = "CIDR block for the VPC"
 }
-
-variable "subnet3_cidr" {
-  type        = string
-  description = "CIDR block for the third subnet"
-}
-
-variable "subnet4_cidr" {
-  type        = string
-  description = "CIDR block for the fourth subnet"
-}
-
-variable "subnet5_cidr" {
-  type        = string
-  description = "CIDR block for the fifth subnet"
-}
-
-variable "subnet6_cidr" {
-  type        = string
-  description = "CIDR block for the sixth subnet"
-}

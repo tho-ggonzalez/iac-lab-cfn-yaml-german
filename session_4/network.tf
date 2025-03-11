@@ -25,43 +25,27 @@ resource "aws_subnet" "public_subnets" {
   }
 }
 
-resource "aws_subnet" "private_subnet_1" {
+resource "aws_subnet" "private_subnets" {
+  count = local.number_of_private_subnets
+
   vpc_id            = aws_vpc.main_vpc.id
-  cidr_block        = var.subnet3_cidr
-  availability_zone = data.aws_availability_zones.available.names[0]
+  cidr_block        = cidrsubnet(var.vpc_cidr, 3, count.index + 2)
+  availability_zone = data.aws_availability_zones.available.names[count.index]
 
   tags = {
-    Name = "${var.prefix}-private-subnet-1"
+    Name = "${var.prefix}-private-subnet-${count.index + 1}"
   }
 }
 
-resource "aws_subnet" "secure_subnet_1" {
+resource "aws_subnet" "secure_subnets" {
+  count = local.number_of_secure_subnets
+
   vpc_id            = aws_vpc.main_vpc.id
-  cidr_block        = var.subnet5_cidr
-  availability_zone = data.aws_availability_zones.available.names[0]
+  cidr_block        = cidrsubnet(var.vpc_cidr, 3, count.index + 4)
+  availability_zone = data.aws_availability_zones.available.names[count.index]
 
   tags = {
-    Name = "${var.prefix}-secure-subnet-1"
-  }
-}
-
-resource "aws_subnet" "private_subnet_2" {
-  vpc_id            = aws_vpc.main_vpc.id
-  cidr_block        = var.subnet4_cidr
-  availability_zone = data.aws_availability_zones.available.names[1]
-
-  tags = {
-    Name = "${var.prefix}-private-subnet-2"
-  }
-}
-
-resource "aws_subnet" "secure_subnet_2" {
-  vpc_id            = aws_vpc.main_vpc.id
-  cidr_block        = var.subnet6_cidr
-  availability_zone = data.aws_availability_zones.available.names[1]
-
-  tags = {
-    Name = "${var.prefix}-secure-subnet-2"
+    Name = "${var.prefix}-secure-subnet-${count.index + 1}"
   }
 }
 
@@ -119,12 +103,9 @@ resource "aws_route_table_association" "public_routetable_associations" {
   route_table_id = aws_route_table.public_routetable.id
 }
 
-resource "aws_route_table_association" "private_routetable_assoc_1" {
-  subnet_id      = aws_subnet.private_subnet_1.id
-  route_table_id = aws_route_table.private_routetable.id
-}
+resource "aws_route_table_association" "private_routetable_associations" {
+  count = 2
 
-resource "aws_route_table_association" "private_routetable_assoc_2" {
-  subnet_id      = aws_subnet.private_subnet_2.id
+  subnet_id      = aws_subnet.private_subnets[count.index].id
   route_table_id = aws_route_table.private_routetable.id
 }
