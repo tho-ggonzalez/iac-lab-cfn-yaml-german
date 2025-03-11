@@ -13,19 +13,21 @@ resource "aws_vpc" "main_vpc" {
   }
 }
 
-resource "aws_subnet" "public_subnet_1" {
+resource "aws_subnet" "public_subnets" {
+  count = local.number_of_public_subnets
+
   vpc_id            = aws_vpc.main_vpc.id
-  cidr_block        = var.subnet1_cidr
-  availability_zone = data.aws_availability_zones.available.names[0]
+  cidr_block        = cidrsubnet(var.vpc_cidr, 3, count.index)
+  availability_zone = data.aws_availability_zones.available.names[count.index]
 
   tags = {
-    Name = "${var.prefix}-public-subnet-1"
+    Name = "${var.prefix}-public-subnet-${count.index + 1}"
   }
 }
 
 resource "aws_subnet" "private_subnet_1" {
   vpc_id            = aws_vpc.main_vpc.id
-  cidr_block        = var.subnet2_cidr
+  cidr_block        = var.subnet3_cidr
   availability_zone = data.aws_availability_zones.available.names[0]
 
   tags = {
@@ -35,7 +37,7 @@ resource "aws_subnet" "private_subnet_1" {
 
 resource "aws_subnet" "secure_subnet_1" {
   vpc_id            = aws_vpc.main_vpc.id
-  cidr_block        = var.subnet3_cidr
+  cidr_block        = var.subnet5_cidr
   availability_zone = data.aws_availability_zones.available.names[0]
 
   tags = {
@@ -43,19 +45,9 @@ resource "aws_subnet" "secure_subnet_1" {
   }
 }
 
-resource "aws_subnet" "public_subnet_2" {
-  vpc_id            = aws_vpc.main_vpc.id
-  cidr_block        = var.subnet4_cidr
-  availability_zone = data.aws_availability_zones.available.names[1]
-
-  tags = {
-    Name = "${var.prefix}-public-subnet-2"
-  }
-}
-
 resource "aws_subnet" "private_subnet_2" {
   vpc_id            = aws_vpc.main_vpc.id
-  cidr_block        = var.subnet5_cidr
+  cidr_block        = var.subnet4_cidr
   availability_zone = data.aws_availability_zones.available.names[1]
 
   tags = {
@@ -87,7 +79,7 @@ resource "aws_eip" "nat_eip" {
 
 resource "aws_nat_gateway" "nat_gw" {
   allocation_id = aws_eip.nat_eip.id
-  subnet_id     = aws_subnet.public_subnet_2.id
+  subnet_id     = aws_subnet.public_subnets[1].id
 
   tags = {
     Name = "${var.prefix}-nat-gw"
@@ -120,13 +112,10 @@ resource "aws_route_table" "private_routetable" {
   }
 }
 
-resource "aws_route_table_association" "public_routetable_assoc_1" {
-  subnet_id      = aws_subnet.public_subnet_1.id
-  route_table_id = aws_route_table.public_routetable.id
-}
+resource "aws_route_table_association" "public_routetable_associations" {
+  count = 2
 
-resource "aws_route_table_association" "public_routetable_assoc_2" {
-  subnet_id      = aws_subnet.public_subnet_2.id
+  subnet_id      = aws_subnet.public_subnets[count.index].id
   route_table_id = aws_route_table.public_routetable.id
 }
 
