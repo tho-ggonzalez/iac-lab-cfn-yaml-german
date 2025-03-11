@@ -2,6 +2,10 @@ resource "aws_s3_bucket" "s3_tfstate_bucket" {
   bucket = "${var.prefix}-tfstate"
   force_destroy = true
 
+  lifecycle {
+    prevent_destroy = true
+  }
+
   tags = {
     Name = "${var.prefix}-tfstate"
   }
@@ -15,12 +19,19 @@ resource "aws_s3_bucket_versioning" "s3_tfstate_bucket_versioning" {
   }
 }
 
+resource "aws_kms_key" "s3_kms_key" {
+  description             = "KMS key for S3 encryption"
+  deletion_window_in_days = 10
+  enable_key_rotation     = true
+}
+
 resource "aws_s3_bucket_server_side_encryption_configuration" "s3_tfstate_bucket_sse" {
   bucket = aws_s3_bucket.s3_tfstate_bucket.id
 
   rule {
     apply_server_side_encryption_by_default {
-      sse_algorithm = "AES256"
+      kms_master_key_id = aws_kms_key.s3_kms_key.arn
+      sse_algorithm      = "aws:kms"
     }
   }
 }
