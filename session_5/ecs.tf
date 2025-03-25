@@ -1,5 +1,5 @@
 resource "aws_ecs_cluster" "this" {
-  name = format("%s-ecs-cluster", var.prefix)
+  name = format("%secs-cluster", var.prefix)
   setting {
     name  = "containerInsights"
     value = "enabled"
@@ -24,7 +24,7 @@ resource "aws_ecs_cluster_capacity_providers" "this" {
 }
 
 resource "aws_ecs_service" "this" {
-  name                               = format("%s-ecs-service", var.prefix)
+  name                               = format("%secs-service", var.prefix)
   cluster                            = aws_ecs_cluster.this.id
   task_definition                    = aws_ecs_task_definition.this.arn
   launch_type                        = "FARGATE"
@@ -35,7 +35,7 @@ resource "aws_ecs_service" "this" {
 
   network_configuration {
     security_groups  = [aws_security_group.ecs.id]
-    subnets          = aws_subnet.private_subnets[*].id
+    subnets          = module.main_vpc.public_subnets
     assign_public_ip = false
   }
 
@@ -55,7 +55,7 @@ resource "aws_ecs_service" "this" {
 }
 
 resource "aws_ecs_task_definition" "this" {
-  family                   = format("%s-ecs-task-definition", var.prefix)
+  family                   = format("%secs-task-definition", var.prefix)
   requires_compatibilities = ["FARGATE"]
   network_mode             = "awsvpc"
   task_role_arn            = aws_iam_role.ecs_task_role.arn
@@ -71,8 +71,8 @@ resource "aws_ecs_task_definition" "this" {
 }
 
 resource "aws_security_group" "ecs" {
-  name   = format("%s-ecs-sg", var.prefix)
-  vpc_id = aws_vpc.main_vpc.id
+  name   = format("%secs-sg", var.prefix)
+  vpc_id = module.main_vpc.vpc_id
 
   ingress {
     description     = "Allow ALB access to ECS on port 8000"

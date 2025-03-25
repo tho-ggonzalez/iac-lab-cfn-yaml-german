@@ -10,7 +10,7 @@ data "aws_iam_policy_document" "ecs_assume_role" {
 }
 
 resource "aws_iam_role" "ecs_task_execution" {
-  name               = format("%s-ecs-task-execution-role", var.prefix)
+  name               = format("%secs-task-execution-role", var.prefix)
   assume_role_policy = data.aws_iam_policy_document.ecs_assume_role.json
 }
 
@@ -20,6 +20,6 @@ resource "aws_iam_role_policy_attachment" "ecs_task_execution_role_policy" {
 }
 
 resource "aws_iam_role" "ecs_task_role" {
-  name               = format("%s-ecs-task-role", var.prefix)
+  name               = format("%secs-task-role", var.prefix)
   assume_role_policy = data.aws_iam_policy_document.ecs_assume_role.json
 }
