@@ -3,7 +3,7 @@ data "aws_availability_zones" "available" {
 }
 
 module "main_vpc" {
-  source = "terraform-aws-modules/vpc/aws"
+  source  = "terraform-aws-modules/vpc/aws"
   version = "5.19.0"
 
   name = "${var.prefix}vpc"
@@ -30,37 +30,3 @@ resource "aws_subnet" "secure_subnets" {
     Name = "${var.prefix}secure-subnet-${count.index + 1}"
   }
 }
-
-# resource "aws_internet_gateway" "main_igw" {
-#   vpc_id = module.main_vpc.vpc_id
-
-#   tags = {
-#     Name = "${var.prefix}igw"
-#   }
-# }
-
-# resource "aws_route_table" "public_routetable" {
-#   vpc_id = module.main_vpc.vpc_id
-
-#   route {
-#     cidr_block = "0.0.0.0/0"
-#     gateway_id = aws_internet_gateway.main_igw.id
-#   }
-
-#   tags = {
-#     Name = "${var.prefix}public-routetable"
-#   }
-# }
-
-# resource "aws_route_table" "private_routetable" {
-#   vpc_id = module.main_vpc.vpc_id
-
-#   route {
-#     cidr_block = "0.0.0.0/0"
-#     gateway_id = module.main_vpc.natgw_ids[0]
-#   }
-
-#   tags = {
-#     Name = "${var.prefix}private-routetable"
-#   }
-# }
