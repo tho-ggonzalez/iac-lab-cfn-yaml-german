@@ -55,7 +55,7 @@ resource "aws_ecs_service" "this" {
 }
 
 resource "aws_ecs_task_definition" "this" {
-  family                   = format("%secs-task-definition", var.prefix)
+  family                   = format("%s-ecs-task-definition", var.prefix)
   requires_compatibilities = ["FARGATE"]
   network_mode             = "awsvpc"
   task_role_arn            = aws_iam_role.ecs_task_role.arn
@@ -67,7 +67,15 @@ resource "aws_ecs_task_definition" "this" {
     image_url        = aws_ecr_repository.api.repository_url
     cloudwatch_group = aws_cloudwatch_log_group.ecs.name
     region           = var.region
+    db_address       = var.db_address
+    db_name          = var.db_name
+    db_username      = var.db_username
+    db_password_arn  = var.db_secret_arn
   })
+
+  runtime_platform {
+    cpu_architecture = "ARM64"
+  }
 }
 
 resource "aws_security_group" "ecs" {

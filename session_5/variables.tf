@@ -15,3 +15,13 @@ variable "vpc_cidr" {
   description = "CIDR block for the VPC"
   default     = "192.168.1.0/25"
 }
+
+variable "db_name" {
+  type        = string
+  description = "Name of the database"
+}
+
+variable "db_username" {
+  type        = string
+  description = "Username for the database"
+}
