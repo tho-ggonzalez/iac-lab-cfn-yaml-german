@@ -7,7 +7,7 @@ module "ecs" {
   private_subnet_ids    = module.main_vpc.private_subnets
   alb_target_group_arn  = aws_lb_target_group.tg.arn
   alb_security_group_id = aws_security_group.lb_sg.id
-  db_address            = aws_db_instance.database.address
+  db_address            = module.rds.rds_address
   db_name               = var.db_name
   db_username           = var.db_username
   db_secret_arn         = local.db_secret_arn
