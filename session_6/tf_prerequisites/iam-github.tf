@@ -86,6 +86,14 @@ resource "aws_iam_role" "github_actions_role" {
             "ecr:GetAuthorizationToken"
           ],
           "Resource" : "*"
+        },
+        {
+          Effect = "Allow"
+          Action = [
+            "kms:Decrypt",
+            "kms:Encrypt"
+          ]
+          Resource = aws_kms_key.dynamodb_key.arn
         }
       ]
     })
