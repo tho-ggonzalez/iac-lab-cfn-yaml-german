@@ -33,4 +33,23 @@ jobs:
           aws sts get-caller-identity            
 
     # Can add extra steps to run Terraform to create the AWS resources
-       
+
+      - name: Terraform Setup
+        uses: hashicorp/setup-terraform@v3
+        with:
+          terraform_version: 1.11.3
+
+      - name: Terraform Init
+        run: |
+          cd session_6
+          terraform init
+      
+      - name: Terraform Validate
+        run: |
+          terraform fmt --recursive
+          tflint --recursive
+          terraform validate
+      
+      - name: Terraform Plan
+        run: |
+          terraform plan
