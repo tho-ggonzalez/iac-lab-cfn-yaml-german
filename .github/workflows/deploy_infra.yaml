@@ -39,6 +39,11 @@ jobs:
         with:
           terraform_version: 1.11.3
 
+      - name: TFLint Setup
+        uses: terraform-linters/setup-tflint@v4
+        with:
+          tflint_version: v0.56.0
+
       - name: Terraform Init
         run: |
           cd session_6
@@ -46,10 +51,12 @@ jobs:
       
       - name: Terraform Validate
         run: |
+          cd session_6
           terraform fmt --recursive
           tflint --recursive
           terraform validate
       
       - name: Terraform Plan
         run: |
+          cd session_6
           terraform plan

@@ -41,14 +41,14 @@ resource "aws_iam_role" "github_actions_role" {
           "Action" : [
             "s3:*",
           ],
-          "Resource" : ["arn:aws:s3:::${var.prefix}-tfstate", "arn:aws:s3:::${var.prefix}-tfstate/*"]
+          "Resource" : ["arn:aws:s3:::${var.prefix}-tfstate", "arn:aws:s3:::${var.prefix}tfstate/*"]
         },
         {
           "Effect" : "Allow",
           "Action" : [
             "dynamodb:*",
           ],
-          "Resource" : format("arn:aws:dynamodb:%s:%s:table/%s-tfstate-locks*", data.aws_region.current.id, data.aws_caller_identity.current.id, var.prefix)
+          "Resource" : format("arn:aws:dynamodb:%s:%s:table/%stfstate-locks*", data.aws_region.current.id, data.aws_caller_identity.current.id, var.prefix)
         },
         {
           "Effect" : "Allow",
