@@ -28,12 +28,6 @@ jobs:
           role-to-assume: ${{ env.IAM_ROLE }}
           aws-region: ${{ env.AWS_REGION }}
 
-      - name: Get aws identity
-        run: |
-          aws sts get-caller-identity            
-
-    # Can add extra steps to run Terraform to create the AWS resources
-
       - name: Terraform Setup
         uses: hashicorp/setup-terraform@v3
         with:
@@ -59,4 +53,9 @@ jobs:
       - name: Terraform Plan
         run: |
           cd session_6
-          terraform plan
+          terraform plan -var-file="dev.tfvars"
+      
+      - name: Terraform Apply
+        run: |
+          cd session_6
+          terraform apply -auto-approve -var-file="dev.tfvars"
