@@ -4,10 +4,10 @@ on: workflow_dispatch
 
 env:
   AWS_REGION: eu-central-1
-  ECR_REPOSITORY: gg-iac-lab-api
+  ECR_REPOSITORY: gg-iac-lab-crud-app
   ECS_SERVICE: gg-iac-lab-ecs-service
   ECS_CLUSTER: gg-iac-lab-ecs-cluster
-  ECS_TASK_DEFINITION: gg-iac-lab-ecs-task-definition
+  ECS_TASK_DEFINITION: gg-iac-lab--ecs-task-definition
   IAM_ROLE: arn:aws:iam::160071257600:role/gg-iac-lab--github-actions-role
 
 jobs:
