@@ -91,9 +91,17 @@ resource "aws_iam_role" "github_actions_role" {
           Effect = "Allow"
           Action = [
             "kms:Decrypt",
+            "kms:TagResource",
             "kms:Encrypt"
           ]
           Resource = aws_kms_key.dynamodb_key.arn
+        },
+        {
+          Effect = "Allow"
+          Action = [
+            "kms:*"
+          ]
+          "Resource" : "*"
         }
       ]
     })
